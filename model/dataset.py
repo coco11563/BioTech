@@ -12,6 +12,7 @@ from torch_geometric.utils import from_scipy_sparse_matrix, from_networkx
 
 def load_processed_file(root, name):
     network_file = os.path.join(root, f'{name}.networkx.g')
+    # network_file = os.path.join(root, f'{name}.adj.coo.npy')
     feature_file = os.path.join(root, f'{name}.feat.pt')
     label_file = os.path.join(root, 'label.pt')
     # with open(network_file, 'rb') as f:
@@ -102,7 +103,7 @@ class DomainData(InMemoryDataset):
         x, edge_index, y = net['attrb'], net['network'], net['group']
         x = torch.from_numpy(np.array(x).astype(float)).to(torch.float)
         # _, y = torch.max(torch.from_numpy(y).to(torch.int64), dim=1)
-        # edge_index, edge_weight = from_networkx(edge_index)
+        edge_index= from_networkx(edge_index).edge_index
 
         data_list = []
         data = Data(edge_index=edge_index, x=x, y=y)
